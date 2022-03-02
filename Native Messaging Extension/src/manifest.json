@@ -1,0 +1,16 @@
+{
+    "author": "Christian Szech",
+    "default_locale": "de",
+    "name": "__MSG_extensionName__",
+    "version": "1",
+    "manifest_version": 3,
+    "description": "__MSG_extensionDescription__",
+    "permissions": [
+        "activeTab",
+        "nativeMessaging",
+        "tabs"
+    ],
+    "background": {
+        "service_worker": "js/background-worker.js"
+    }
+}
