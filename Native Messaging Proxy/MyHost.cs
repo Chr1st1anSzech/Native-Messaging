@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Native_Messaging
+namespace Native_Messaging_Proxy
 {
     public class MyHost : Host
     {

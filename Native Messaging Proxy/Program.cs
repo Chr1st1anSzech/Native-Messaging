@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Native_Messaging
+namespace Native_Messaging_Proxy
 {
     class Program
     {

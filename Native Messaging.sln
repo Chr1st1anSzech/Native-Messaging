@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Native Messaging", "Native Messaging\Native Messaging.csproj", "{A16EB163-B8A2-492B-BD6F-4C5C18C015D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Native Messaging Proxy", "Native Messaging Proxy\Native Messaging Proxy.csproj", "{A16EB163-B8A2-492B-BD6F-4C5C18C015D1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Native Messaging Companion", "Native Messaging Companion\Native Messaging Companion.csproj", "{839ECF00-FC6D-48A9-A47F-92B2A2A89886}"
 EndProject
