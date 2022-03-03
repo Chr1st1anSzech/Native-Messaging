@@ -5,7 +5,7 @@ namespace Native_Messaging_Companion
 {
     class Program
     {
-       
+
         static void Main(string[] args)
         {
             using var client = new TcpClient();
@@ -25,7 +25,7 @@ namespace Native_Messaging_Companion
                 {
                     Console.WriteLine("Nachricht:");
                     string? message = Console.ReadLine();
-                    if( !string.IsNullOrWhiteSpace(message))
+                    if (!string.IsNullOrWhiteSpace(message))
                     {
                         message += "\r\n";
                         byte[] bytes = Encoding.UTF8.GetBytes(message);

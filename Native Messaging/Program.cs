@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Native_Messaging
 {
@@ -33,16 +34,19 @@ namespace Native_Messaging
                 try
                 {
                     string? inputLine = reader.ReadLine();
-                    if (inputLine != null)
+                    if (inputLine != null && Regex.IsMatch(inputLine, @"\S+\s*=\s*\S+"))
                     {
-                        Input input = new("Open", inputLine);
+                        string[] splitArray = inputLine.Split('=', 2);
+                        string operation = splitArray[0].Trim().ToLower();
+                        string value = splitArray[1].Trim();
+                        Input input = new(operation, value);
                         JObject? obj = JsonConvert.DeserializeObject<JObject>(JsonConvert.SerializeObject(input));
                         Host.SendMessage(obj);
                     }
                 }
                 catch (Exception ex)
                 {
-                    File.AppendAllText(@"C:\Users\Christian\Desktop\blaaaa.txt", $"Fehler={ex.Message}");
+                    // Todo: Exception Handling
                 }
             }
 
