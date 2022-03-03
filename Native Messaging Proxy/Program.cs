@@ -34,15 +34,7 @@ namespace Native_Messaging_Proxy
                 try
                 {
                     string? inputLine = reader.ReadLine();
-                    if (inputLine != null && Regex.IsMatch(inputLine, @"\S+\s*=\s*\S+"))
-                    {
-                        string[] splitArray = inputLine.Split('=', 2);
-                        string operation = splitArray[0].Trim().ToLower();
-                        string value = splitArray[1].Trim();
-                        Input input = new(operation, value);
-                        JObject? obj = JsonConvert.DeserializeObject<JObject>(JsonConvert.SerializeObject(input));
-                        Host.SendMessage(obj);
-                    }
+                    SendInputToExtension(inputLine);
                 }
                 catch (Exception ex)
                 {
@@ -50,6 +42,19 @@ namespace Native_Messaging_Proxy
                 }
             }
 
+        }
+
+        private static void SendInputToExtension(string? inputLine)
+        {
+            if (inputLine != null && Regex.IsMatch(inputLine, @"\S+\s*=\s*\S+"))
+            {
+                string[] splitArray = inputLine.Split('=', 2);
+                string operation = splitArray[0].Trim().ToLower();
+                string value = splitArray[1].Trim();
+                Input input = new(operation, value);
+                JObject? obj = JsonConvert.DeserializeObject<JObject>(JsonConvert.SerializeObject(input));
+                Host.SendMessage(obj);
+            }
         }
 
         public class Input
