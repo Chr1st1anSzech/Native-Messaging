@@ -23,7 +23,7 @@ namespace Native_Messaging_Companion
 
                 while (true)
                 {
-                    Console.WriteLine("Nachricht:");
+                    Console.WriteLine("Message: ");
                     string? message = Console.ReadLine();
                     if (!string.IsNullOrWhiteSpace(message))
                     {
@@ -36,7 +36,7 @@ namespace Native_Messaging_Companion
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Port nicht geöffnet");
+                Console.WriteLine($"Connection could not be established. Reason: {ex.Message}");
             }
         }
     }

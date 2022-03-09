@@ -10,14 +10,39 @@ namespace Native_Messaging_Proxy
 {
     class Program
     {
-        static Host Host = null!;
+        private static Host s_host = null!;
 
-        readonly static string[] AllowedOrigins = new string[]
+        private static readonly string[] s_allowedOrigins = new string[]
             {
                 "chrome-extension://idmbccigjgpdfbaafcdinielklighfbb/"
             };
 
-        readonly static string Description = "Christian Szech Native Messaging Host";
+        private static readonly string s_description = "Christian Szech Native Messaging Host";
+
+        private static readonly Regex s_keyValuePairRegex = new(@"\s*\S+\s*=\s*\S+\s*");
+
+        static void Main(string[] args)
+        {
+            Log.Active = true;
+
+            s_host = new MyHost();
+            s_host.SupportedBrowsers.Add(ChromiumBrowser.GoogleChrome);
+            s_host.SupportedBrowsers.Add(ChromiumBrowser.MicrosoftEdge);
+
+            if (args.Contains("--register"))
+            {
+                s_host.GenerateManifest(s_description, s_allowedOrigins);
+                s_host.Register();
+            }
+            else if (args.Contains("--unregister"))
+            {
+                s_host.Unregister();
+            }
+            else
+            {
+                ListenInput();
+            }
+        }
 
         private static void ListenInput()
         {
@@ -46,52 +71,14 @@ namespace Native_Messaging_Proxy
 
         private static void SendInputToExtension(string? inputLine)
         {
-            if (inputLine != null && Regex.IsMatch(inputLine, @"\S+\s*=\s*\S+"))
+            if (inputLine != null && s_keyValuePairRegex.IsMatch(inputLine))
             {
                 string[] splitArray = inputLine.Split('=', 2);
                 string operation = splitArray[0].Trim().ToLower();
                 string value = splitArray[1].Trim();
-                Input input = new(operation, value);
-                JObject? obj = JsonConvert.DeserializeObject<JObject>(JsonConvert.SerializeObject(input));
-                Host.SendMessage(obj);
-            }
-        }
-
-        public class Input
-        {
-            [JsonProperty("Operation")]
-            public string? Operation { get; set; }
-
-            [JsonProperty("Value")]
-            public string? Value { get; set; }
-
-            public Input(string operation, string value)
-            {
-                Value = value;
-                Operation = operation;
-            }
-        }
-
-        static void Main(string[] args)
-        {
-            Log.Active = true;
-
-            Host = new MyHost();
-            Host.SupportedBrowsers.Add(ChromiumBrowser.GoogleChrome);
-            Host.SupportedBrowsers.Add(ChromiumBrowser.MicrosoftEdge);
-
-            if (args.Contains("--register"))
-            {
-                Host.GenerateManifest(Description, AllowedOrigins);
-                Host.Register();
-            }
-            else if (args.Contains("--unregister"))
-            {
-                Host.Unregister();
-            }
-            else
-            {
-                ListenInput();
+                Message msg = new(operation, value);
+                JObject? obj = JsonConvert.DeserializeObject<JObject>(JsonConvert.SerializeObject(msg));
+                s_host.SendMessage(obj);
             }
         }
     }
