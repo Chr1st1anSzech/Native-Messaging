@@ -34,17 +34,41 @@ function resizeWindow(windowId, newWidth, newHeight) {
     if(!windowId || !isNumber(newHeight) || !isNumber(newWidth) ){
         return;
     }
-    chrome.windows.update(windowId, { height: parseInt(newHeight), width: parseInt(newWidth) })
+    chrome.windows.update(windowId, { height: parseInt(newHeight), width: parseInt(newWidth) });
+}
+
+async function calcCenterWindow(width, height){
+    const displayInfos = await chrome.system.display.getInfo();
+    let point = {
+        left : 0,
+        top : 0
+    }
+    if( displayInfos.length > 0 ){
+        const displayBounds = displayInfos[0].bounds;
+        point.left = ~~((displayBounds.width - width) / 2);
+        point.top = ~~((displayBounds.height - height) / 2);
+    }
+    return point;
+}
+
+async function centerWindow(windowId, width, height){
+    const point = await calcCenterWindow(width, height);
+    chrome.windows.update(windowId, { left: point.left, top: point.top });
 }
 
 async function openNewWindow(url) {
     if(!isUrl(url) ){
         return;
     }
+    const width = 800;
+    const height = 450;
+    const point = await calcCenterWindow(width, height);
     let window = await chrome.windows.create({
         focused: true,
-        height: 450,
-        width: 800,
+        height: height,
+        width: width,
+        left: point.left, 
+        top: point.top,
         focused: true,
         type: "popup",
         url: url
@@ -56,16 +80,14 @@ async function openNewWindow(url) {
 
 function onNativeMessage(message) {
     if (message.Operation && message.Value) {
+        const value = message.Value;
         const operation = message.Operation.toLowerCase();
         if (operation == "open") {
-            openUrl(message.Value);
+            openUrl(value);
         }
-        else if (operation == "resize" && message.Value ) {
-            const value = message.Value;
-            if( value.match(/\d+x\d+/) ){
-                const splitArray = value.split('x');
-                resizeWindow(openedWindowId, splitArray[0], splitArray[1])
-            }
+        else if (operation == "resize" && value.match(/\d+x\d+/) ) {
+            const splitArray = value.split('x');
+            resizeWindow(openedWindowId, splitArray[0], splitArray[1]);
         }
     }
 }

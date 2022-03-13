@@ -8,7 +8,8 @@
     "permissions": [
         "activeTab",
         "nativeMessaging",
-        "tabs"
+        "tabs",
+        "system.display"
     ],
     "background": {
         "service_worker": "js/background-worker.js"
