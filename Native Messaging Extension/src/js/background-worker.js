@@ -69,7 +69,6 @@ async function openNewWindow(url) {
         width: width,
         left: point.left, 
         top: point.top,
-        focused: true,
         type: "popup",
         url: url
     });
