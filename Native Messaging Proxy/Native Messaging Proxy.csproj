@@ -9,6 +9,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="log4net.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="log4net.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="log4net" Version="2.0.14" />
     <PackageReference Include="NativeMessaging" Version="2.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
